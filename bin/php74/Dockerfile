@@ -49,7 +49,9 @@ RUN apt-get update && \
     pecl install imagick && \
     docker-php-ext-enable imagick
 
-# Other PHP7 Extensions
+# Other PHP7 Extensions magento
+RUN apt-get install -y libxml2-dev
+RUN apt-get update && apt-get install -y libxslt-dev
 
 RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install pdo_sqlite && \
@@ -61,8 +63,11 @@ RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install -j$(nproc) intl && \
     docker-php-ext-install mbstring && \
     docker-php-ext-install gettext && \
-    docker-php-ext-install exif
-
+    docker-php-ext-install exif && \
+    docker-php-ext-install soap && \
+    docker-php-ext-install bcmath && \
+    docker-php-ext-install xsl && \
+    docker-php-ext-install sockets
 
 # Install Freetype 
 RUN apt-get -y update && \

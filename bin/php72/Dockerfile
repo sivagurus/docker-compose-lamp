@@ -54,3 +54,30 @@ RUN docker-php-ext-install -j$(nproc) gd
 
 # Enable apache modules
 RUN a2enmod rewrite headers
+
+# prestashop
+
+RUN apt-get -y update && \
+    apt install -y libxml2-dev && \
+    docker-php-ext-install dom && \
+    docker-php-ext-install fileinfo && \
+    docker-php-ext-install simplexml
+
+RUN apt install -y libwebp-dev libjpeg-dev libpng-dev libfreetype6-dev
+
+RUN docker-php-ext-configure gd --with-webp-dir=/usr/include/webp --with-jpeg-dir=/usr/include --with-png-dir=/usr/include --with-freetype-dir=/usr/include/freetype2 
+
+RUN docker-php-ext-install gd && \
+    docker-php-ext-enable gd
+
+RUN apt-get install -y \
+        libonig-dev \
+    && docker-php-ext-install iconv
+
+RUN pecl install --force apcu && \
+    pecl run-tests apcu
+# prestashop end
+
+ARG user_id=1000
+RUN usermod -u $user_id www-data
+RUN chown -R www-data:www-data /var/www/html
